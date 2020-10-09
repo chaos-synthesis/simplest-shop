@@ -23,7 +23,7 @@ const api = {
    */
   async products() {
     try {
-      const results = await api._get("products").then((res) => res.json());
+      const results = await api._get("products");
       return results.map((product) => ({
         ...product,
         image: `${STATIC_URL}/${product.img}`,
@@ -57,17 +57,17 @@ const api = {
     };
   },
   _post(resourcePath, body) {
-    return fetch(`${API_URL}/api/${resourcePath}/`, {
+    return fetch(`${API_URL}/api/${resourcePath}`, {
       method: "POST",
       headers: api._headers,
       body,
-    });
+    }).then((res) => res.json());
   },
   _get(resourcePath) {
-    return fetch(`${API_URL}/api/${resourcePath}/`, {
+    return fetch(`${API_URL}/api/${resourcePath}`, {
       method: "GET",
       headers: api._headers,
-    });
+    }).then((res) => res.json());
   },
 };
 

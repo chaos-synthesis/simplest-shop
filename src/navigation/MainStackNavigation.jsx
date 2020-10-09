@@ -8,6 +8,7 @@ import CatalogScreen from "../screens/CatalogScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import AuthScreen from "../screens/AuthScreen";
 import SignupScreen from "../screens/SignupScreen";
+import ProductDetails from "../screens/ProductDetails";
 
 const BaseStackNav = createStackNavigator();
 
@@ -28,6 +29,10 @@ const MainStackNavigation = () => {
       >
         <BaseStackNav.Screen name="Home" component={CatalogScreen} />
         <BaseStackNav.Screen
+          name="Product Details"
+          component={ProductDetails}
+        />
+        <BaseStackNav.Screen
           name="Profile"
           component={ProfileScreen}
           options={{ cardStyle }}
@@ -45,11 +50,13 @@ const MainStackNavigation = () => {
       </BaseStackNav.Navigator>
       {showLoader && (
         <Portal>
-          <BlurView
-            intensity={70}
-            style={blurContainer}
-          >
-            <View style={[styles.spinContainer, {backgroundColor: colors.background}]}>
+          <BlurView intensity={70} style={blurContainer}>
+            <View
+              style={[
+                styles.spinContainer,
+                { backgroundColor: colors.background },
+              ]}
+            >
               <ActivityIndicator size={50} />
             </View>
           </BlurView>

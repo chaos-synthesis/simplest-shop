@@ -5,12 +5,17 @@ import ProductCard from "../components/ProductCard";
 import useApi from "../hooks/useApi";
 import API from "../api";
 
-const CatalogScreen = () => {
+const CatalogScreen = ({ navigation }) => {
   const { data, loading, error } = useApi(API.products);
   return (
     <FlatList
       data={data}
-      renderItem={(item) => <ProductCard {...item} />}
+      renderItem={({ item }) => (
+        <ProductCard
+          {...item}
+          onPress={() => navigation.navigate("Product Details", item)}
+        />
+      )}
       keyExtractor={(item, index) => item.id?.toString() || index.toString()}
       contentContainerStyle={styles.listContainer}
     />

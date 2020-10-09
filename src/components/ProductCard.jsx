@@ -2,10 +2,10 @@ import React from "react";
 import { Image, StyleSheet } from "react-native";
 import { Card, Text, Paragraph, IconButton, Colors } from "react-native-paper";
 
-const ProductCard = ({ item: { id, image, text, title, ...rest } = {}}) => {
+const ProductCard = ({ id, image, text, title, onPress }) => {
   return (
-    <Card>
-      <Card.Cover source={{ uri: image }}/>
+    <Card onPress={onPress}>
+      <Card.Cover source={{ uri: image }} />
       <Card.Title
         title={title}
         style={{ position: "absolute" }}
@@ -16,16 +16,8 @@ const ProductCard = ({ item: { id, image, text, title, ...rest } = {}}) => {
         }}
       />
       <Card.Content>
-        <Paragraph>{text}</Paragraph>
+        <Paragraph numberOfLines={1}>{text}</Paragraph>
       </Card.Content>
-      <Card.Actions>
-        <IconButton
-          icon="star"
-          color={Colors.red500}
-          size={20}
-          onPress={() => console.log("Pressed")}
-        />
-      </Card.Actions>
     </Card>
   );
 };
