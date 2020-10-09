@@ -1,14 +1,24 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
+import ProductCard from "../components/ProductCard";
+import useApi from "../hooks/useApi";
+import API from "../api";
 
 const CatalogScreen = () => {
+  const { data, loading, error } = useApi(API.products);
   return (
-    <View>
-      <Text>Items list</Text>
-    </View>
+    <FlatList
+      data={data}
+      renderItem={(item) => <ProductCard {...item} />}
+      keyExtractor={(item, index) => item.id?.toString() || index.toString()}
+      contentContainerStyle={styles.listContainer}
+    />
   );
 };
 
 export default CatalogScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  listContainer: {},
+});

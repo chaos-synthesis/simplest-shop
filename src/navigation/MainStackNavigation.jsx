@@ -17,6 +17,11 @@ const MainStackNavigation = () => {
 
   return (
     <React.Fragment>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor={colors.background}
+        animated
+      />
       <BaseStackNav.Navigator
         screenOptions={{ headerShown: false }}
         mode="modal"
@@ -42,9 +47,9 @@ const MainStackNavigation = () => {
         <Portal>
           <BlurView
             intensity={70}
-            style={[StyleSheet.absoluteFill, blurContainer]}
+            style={blurContainer}
           >
-            <View style={styles.spinContainer}>
+            <View style={[styles.spinContainer, {backgroundColor: colors.background}]}>
               <ActivityIndicator size={50} />
             </View>
           </BlurView>
@@ -63,13 +68,13 @@ const cardStyle = {
 
 const styles = StyleSheet.create({
   blurContainer: {
+    ...StyleSheet.absoluteFillObject,
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     zIndex: 50,
   },
   spinContainer: {
-    backgroundColor: colors.background,
     padding: 20,
     borderRadius: 15,
   },
