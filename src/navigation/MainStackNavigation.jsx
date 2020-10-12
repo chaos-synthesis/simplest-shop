@@ -10,14 +10,23 @@ import AuthScreen from "../screens/AuthScreen";
 import SignupScreen from "../screens/SignupScreen";
 import ProductDetails from "../screens/ProductDetails";
 
-const BaseStackNav = createStackNavigator();
+const AuthStackNav = createStackNavigator();
+const AuthStackNavigation = () => {
+  return (
+    <AuthStackNav.Navigator headerMode="none">
+      <AuthStackNav.Screen name="Auth" component={AuthScreen} />
+      <AuthStackNav.Screen name="SignUp" component={SignupScreen} />
+    </AuthStackNav.Navigator>
+  );
+};
 
+const BaseStackNav = createStackNavigator();
 const MainStackNavigation = () => {
   const [{ showLoader }] = useGlobals();
   const { colors } = useTheme();
 
   return (
-    <React.Fragment>
+    <>
       <StatusBar
         barStyle="dark-content"
         backgroundColor={colors.background}
@@ -37,16 +46,7 @@ const MainStackNavigation = () => {
           component={ProfileScreen}
           options={{ cardStyle }}
         />
-        <BaseStackNav.Screen
-          name="Auth"
-          component={AuthScreen}
-          options={{ cardStyle }}
-        />
-        <BaseStackNav.Screen
-          name="SignUp"
-          component={SignupScreen}
-          options={{ cardStyle }}
-        />
+        <BaseStackNav.Screen name="Auth" component={AuthStackNavigation} />
       </BaseStackNav.Navigator>
       {showLoader && (
         <Portal>
@@ -62,7 +62,7 @@ const MainStackNavigation = () => {
           </BlurView>
         </Portal>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

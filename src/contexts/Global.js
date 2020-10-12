@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useReducer } from "react";
 
-const default_session = {};
+const SET_LOGOUT = "setLogOut";
+const TOGGLE_LOADER = "toggleLoader";
+const SET_SESSION = "setSession";
+
+const default_session = {
+  token: null,
+};
 export const initialState = {
   session: default_session,
   showLoader: false,
@@ -8,17 +14,17 @@ export const initialState = {
 
 export const reducer = (state, action) => {
   switch (action.type) {
-    case "setLogOut":
+    case SET_LOGOUT:
       return {
         ...state,
         session: default_session,
       };
-    case "toggleLoader":
+    case TOGGLE_LOADER:
       return {
         ...state,
         showLoader: !state.showLoader,
       };
-    case "setSession":
+    case SET_SESSION:
       return {
         ...state,
         session: { ...state.session, ...action.fields },
@@ -50,6 +56,10 @@ export const StateProvider = ({ reducer, initialState, children }) => (
 );
 
 /**
- * @returns {{showLoader: boolean}}
+ * @returns {{showLoader: boolean, session: {*}, dispatch: function}}
  */
 export const useGlobals = () => useContext(StateContext);
+
+export const logoutAction = () => ({ type: SET_LOGOUT });
+export const toggleLoaderAction = () => ({ type: TOGGLE_LOADER });
+export const setSessionAction = (fields) => ({ type: SET_SESSION, fields });

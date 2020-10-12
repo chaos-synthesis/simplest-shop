@@ -1,4 +1,5 @@
 import React from "react";
+import { useGlobals } from "../contexts/Global";
 
 /**
  * @param state
@@ -23,15 +24,17 @@ function reducer(state, action) {
 }
 
 /**
- * @param apiMethodFn {(function(): Promise)}
+ * @param apiMethodFn {(function(): Promise), immediate?: boolean}
  * @returns {{data: *, setLoading: (function(): void), loading: *, error: number}}
  */
-const useApi = (apiMethodFn) => {
+const useApi = (apiMethodFn, immediate = true) => {
   const [{ data, loading }, dispatch] = React.useReducer(reducer, {
-    loading: true,
+    loading: immediate,
     data: [],
   });
   const [error, setError] = React.useState(0);
+  const [{ session }] = useGlobals();
+
   const setLoading = () => {
     dispatch({ type: "fetchRequest" });
   };
@@ -43,10 +46,10 @@ const useApi = (apiMethodFn) => {
       apiMethodFn().then(
         (res) => {
           isSubscribed && dispatch({ type: "fetchResponse", data: res });
-          console.log(res);
+          console.log("useApi cb: ", res);
         },
         (e) => {
-          console.error(e);
+          console.error("useApi error: ", e);
           isSubscribed && setError((error) => error + 1);
         }
       );

@@ -1,14 +1,24 @@
+import { get } from "lodash";
+
 const API_URL = "http://smktesting.herokuapp.com";
 const STATIC_URL = "http://smktesting.herokuapp.com/static";
 
 const api = {
+  /**
+   * @param {*} token
+   */
+  setToken(token) {
+    api._token = token;
+  },
   /**
    * @param {*} username
    * @param {*} password
    * @returns Promise<{success: boolean, token: string}>
    */
   async register(username, password) {
-    return api._post("register", { username, password });
+    const result = await api._post("register", { username, password });
+    api._token = get(result, "token", null);
+    return result;
   },
   /**
    * @param {*} username
@@ -16,7 +26,9 @@ const api = {
    * @returns Promise<{success: boolean, token: string}>
    */
   async login(username, password) {
-    return api._post("login", { username, password });
+    const result = await api._post("login", { username, password });
+    api._token = get(result, "token", null);
+    return result;
   },
   /**
    * @returns Promise<Array<{id: number, title: string, image: string, text: string}>>
@@ -56,18 +68,20 @@ const api = {
       ...(api._token ? { Authorization: `Token ${api._token}` } : {}),
     };
   },
-  _post(resourcePath, body) {
-    return fetch(`${API_URL}/api/${resourcePath}`, {
+  async _post(resourcePath, body) {
+    const res = await fetch(`${API_URL}/api/${resourcePath}`, {
       method: "POST",
       headers: api._headers,
       body,
-    }).then((res) => res.json());
+    });
+    return await res.json();
   },
-  _get(resourcePath) {
-    return fetch(`${API_URL}/api/${resourcePath}`, {
+  async _get(resourcePath) {
+    const res = await fetch(`${API_URL}/api/${resourcePath}`, {
       method: "GET",
       headers: api._headers,
-    }).then((res) => res.json());
+    });
+    return await res.json();
   },
 };
 
