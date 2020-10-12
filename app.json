@@ -22,6 +22,10 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "sdkVersion": "39.0.0"
+    "sdkVersion": "39.0.0",
+    "description": "",
+    "android": {
+      "package": "com.dprilipko.simpleshop"
+    }
   }
 }

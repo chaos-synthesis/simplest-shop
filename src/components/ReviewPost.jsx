@@ -8,7 +8,7 @@ const ReviewPost = ({ rate, text, created_by = {} }) => {
     <Card>
       <Card.Title
         left={() => <Rating rate={rate} />}
-        right={() => <Text>{created_by.username}</Text>}
+        right={() => <Text style={styles.username}>{created_by.username}</Text>}
       />
       <Card.Content>
         <Paragraph>{text}</Paragraph>
@@ -19,4 +19,8 @@ const ReviewPost = ({ rate, text, created_by = {} }) => {
 
 export default ReviewPost;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  username: {
+    paddingHorizontal: 12,
+  },
+});

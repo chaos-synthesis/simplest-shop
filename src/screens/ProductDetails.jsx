@@ -4,6 +4,7 @@ import {
   View,
   TouchableWithoutFeedback,
   Keyboard,
+  SectionList,
 } from "react-native";
 import { BlurView } from "expo-blur";
 import {
@@ -21,38 +22,39 @@ import API from "../api";
 import { ScrollView } from "react-native-gesture-handler";
 import ReviewPost from "../components/ReviewPost";
 import ReviewForm from "../components/ReviewForm";
+import { useGlobals } from "../contexts/Global";
 
 const ProductDetails = ({
   route: { params: { id, image, text, title } } = {},
 }) => {
   const { data, loading, error } = useApi(() => API.reviews(id));
+  const [{ session }] = useGlobals();
 
   return (
     <BlurView
-      style={[StyleSheet.absoluteFill, { flex: 1 }]}
+      style={[StyleSheet.absoluteFill, styles.container]}
       tint={"light"}
       intensity={Platform.isAndroid ? 150 : 100}
     >
+      <Close position="right" />
       <ScrollView>
-        <Close position="right" />
         <Card style={{ marginTop: 50 }}>
-          <Card.Cover source={{ uri: image }} />
           <Card.Title
             title={title}
-            style={{ position: "absolute" }}
             titleStyle={{
               textShadowColor: "white",
               textShadowRadius: 1,
               textShadowOffset: { width: 1, height: 1 },
             }}
           />
+          <Card.Cover source={{ uri: image }} />
           <Card.Content>
             <Paragraph>{text}</Paragraph>
           </Card.Content>
           <Card.Actions
             style={{ flexDirection: "column", alignItems: "flex-start" }}
           >
-            <ReviewForm productId={id} />
+            {!!session.token && <ReviewForm productId={id} />}
           </Card.Actions>
         </Card>
         {data.map((post) => (
@@ -65,4 +67,10 @@ const ProductDetails = ({
 
 export default ProductDetails;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignSelf: "center",
+    justifyContent: "center",
+  },
+});

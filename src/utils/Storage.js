@@ -12,10 +12,10 @@ const Storage = {
   },
 
   async setNavigationState(state) {
-    return Storage._getState(NAVIGATION_KEY, state);
+    return Storage._setState(NAVIGATION_KEY, state);
   },
   async setSessionState(state) {
-    return Storage._getState(SESSION_KEY, state);
+    return Storage._setState(SESSION_KEY, state);
   },
 
   async _getState(key) {

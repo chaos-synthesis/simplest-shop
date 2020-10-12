@@ -10,10 +10,19 @@ import theme from "./theme";
 import API from "./api";
 
 function Main() {
-  const [_, dispatch] = useGlobals();
+  const [{ session }, dispatch] = useGlobals();
   const [isReady, setIsReady] = React.useState(false);
   const [initialState, setInitialState] = React.useState();
 
+  // update persisted state
+  React.useEffect(() => {
+    if (isReady) {
+      console.log("session", session);
+      Storage.setSessionState(session);
+    }
+  }, [session, isReady]);
+
+  // restore persisted state
   React.useEffect(() => {
     const restoreState = async () => {
       try {

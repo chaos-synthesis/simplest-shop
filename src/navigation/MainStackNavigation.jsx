@@ -1,7 +1,13 @@
 import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ActivityIndicator, Portal, Text, useTheme } from "react-native-paper";
+import {
+  ActivityIndicator,
+  Colors,
+  Portal,
+  Text,
+  useTheme,
+} from "react-native-paper";
 import { BlurView } from "expo-blur";
 import { useGlobals } from "../contexts/Global";
 import CatalogScreen from "../screens/CatalogScreen";
@@ -13,7 +19,10 @@ import ProductDetails from "../screens/ProductDetails";
 const AuthStackNav = createStackNavigator();
 const AuthStackNavigation = () => {
   return (
-    <AuthStackNav.Navigator headerMode="none">
+    <AuthStackNav.Navigator
+      headerMode="none"
+      screenOptions={{ cardStyle: { backgroundColor: "transparent" } }}
+    >
       <AuthStackNav.Screen name="Auth" component={AuthScreen} />
       <AuthStackNav.Screen name="SignUp" component={SignupScreen} />
     </AuthStackNav.Navigator>
@@ -33,13 +42,22 @@ const MainStackNavigation = () => {
         animated
       />
       <BaseStackNav.Navigator
-        screenOptions={{ headerShown: false }}
+        screenOptions={{ headerShown: false, cardStyle }}
         mode="modal"
       >
-        <BaseStackNav.Screen name="Home" component={CatalogScreen} />
+        <BaseStackNav.Screen
+          name="Home"
+          component={CatalogScreen}
+          options={{
+            headerShown: true,
+            cardStyle: null,
+            headerTitle: "Online Shop",
+          }}
+        />
         <BaseStackNav.Screen
           name="Product Details"
           component={ProductDetails}
+          options={{ cardStyle }}
         />
         <BaseStackNav.Screen
           name="Profile"
@@ -67,10 +85,12 @@ const MainStackNavigation = () => {
 };
 
 const cardStyle = {
-  backgroundColor: "transparent",
+  // backgroundColor: "transparent",
   marginTop: 50,
   borderTopLeftRadius: 30,
   borderTopRightRadius: 30,
+  overflow: "hidden",
+  elevation: 10,
 };
 
 const styles = StyleSheet.create({

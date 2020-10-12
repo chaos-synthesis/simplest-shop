@@ -69,11 +69,15 @@ const api = {
     };
   },
   async _post(resourcePath, body) {
-    const res = await fetch(`${API_URL}/api/${resourcePath}`, {
+    const res = await fetch(`${API_URL}/api/${resourcePath}/`, {
       method: "POST",
       headers: api._headers,
-      body,
+      body: JSON.stringify(body),
     });
+    if (res.status >= 400) {
+      console.log(res);
+      throw "Oops, something went wrong!";
+    }
     return await res.json();
   },
   async _get(resourcePath) {

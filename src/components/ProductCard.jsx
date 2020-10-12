@@ -22,8 +22,8 @@ export default ProductCard;
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 10,
     marginVertical: 6,
+    borderRadius: 0,
   },
   cardTitle: { position: "absolute" },
   titleText: {
