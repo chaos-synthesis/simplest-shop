@@ -1,61 +1,58 @@
 import React from "react";
-import { AppState } from "react-native";
+import { Linking, Platform } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { AppLoading } from "expo";
-import { useGlobals } from "./contexts/Global";
+import { useGlobals, setSessionAction } from "./contexts/Global";
+import Storage from "./utils/Storage";
 import MainStackNavigation from "./navigation/MainStackNavigation";
+import theme from "./theme";
+import API from "./api";
 
 function Main() {
-  const [{ session, theme, day }, dispatch] = useGlobals();
+  const [_, dispatch] = useGlobals();
   const [isReady, setIsReady] = React.useState(false);
-  const [appState, setAppState] = React.useState(AppState.currentState);
+  const [initialState, setInitialState] = React.useState();
 
-  // Handles screen focus and case when user reopens app
-  const _handleAppStateChange = (nextAppState) => {
-    if (appState.match(/active/) && nextAppState === "active") {
-    }
-    setAppState(nextAppState);
-  };
-
-  // Deal with background/active app
   React.useEffect(() => {
-    AppState.addEventListener("change", _handleAppStateChange);
-    return () => {
-      AppState.removeEventListener("change", _handleAppStateChange);
-    };
-  }, []);
-
-  // Backbones
-  React.useEffect(() => {
-    (async () => {
+    const restoreState = async () => {
       try {
-        if (__DEV__) {
-          // await setTestDeviceIDAsync("EMULATOR");
-          // const state = await Storer.get(PERSISTENCE_KEY);
-          // setInitialState(state);
+        // restore session
+        const savedSession = await Storage.getSessionState();
+        if (savedSession) {
+          dispatch(setSessionAction(savedSession));
+          API.setToken(savedSession.token || null);
         }
 
-        // const session = await Storer.get(SESSION_KEY);
-        // if (session) {
-        //   dispatch({
-        //     type: "setSession",
-        //     fields: { ...session },
-        //   });
-        // }
+        // restore navigation state
+        const initialUrl = await Linking.getInitialURL();
+        if (Platform.OS !== "web" && initialUrl == null) {
+          // only restore state if there's no deep link and we're not on web
+          const state = await Storage.getNavigationState();
+          if (state !== undefined) {
+            setInitialState(state);
+          }
+        }
       } finally {
         setIsReady(true);
       }
-    })();
-  }, []);
+    };
+
+    if (!isReady) {
+      restoreState();
+    }
+  }, [isReady]);
 
   if (!isReady) {
     return <AppLoading />;
   }
 
   return (
-    <PaperProvider>
-      <NavigationContainer>
+    <PaperProvider theme={theme}>
+      <NavigationContainer
+        initialState={initialState}
+        onStateChange={Storage.setNavigationState}
+      >
         <MainStackNavigation />
       </NavigationContainer>
     </PaperProvider>

@@ -4,16 +4,12 @@ import { Card, Text, Paragraph, IconButton, Colors } from "react-native-paper";
 
 const ProductCard = ({ id, image, text, title, onPress }) => {
   return (
-    <Card onPress={onPress}>
+    <Card onPress={onPress} style={styles.container}>
       <Card.Cover source={{ uri: image }} />
       <Card.Title
         title={title}
-        style={{ position: "absolute" }}
-        titleStyle={{
-          textShadowColor: "white",
-          textShadowRadius: 1,
-          textShadowOffset: { width: 1, height: 1 },
-        }}
+        style={styles.cardTitle}
+        titleStyle={styles.titleText}
       />
       <Card.Content>
         <Paragraph numberOfLines={1}>{text}</Paragraph>
@@ -24,4 +20,15 @@ const ProductCard = ({ id, image, text, title, onPress }) => {
 
 export default ProductCard;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: 10,
+    marginVertical: 6,
+  },
+  cardTitle: { position: "absolute" },
+  titleText: {
+    textShadowColor: "white",
+    textShadowRadius: 1,
+    textShadowOffset: { width: 1, height: 1 },
+  },
+});

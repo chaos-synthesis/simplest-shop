@@ -52,7 +52,7 @@ const ProductDetails = ({
           <Card.Actions
             style={{ flexDirection: "column", alignItems: "flex-start" }}
           >
-            <ReviewForm productId={post.id} />
+            <ReviewForm productId={id} />
           </Card.Actions>
         </Card>
         {data.map((post) => (

@@ -8,7 +8,14 @@ import API from "../api";
 const ReviewForm = ({ productId }) => {
   const [rate, setRate] = useState(0);
   const [text, setText] = useState("");
-  const { setLoading } = useApi(() => API.postReview(productId, rate, text));
+  //   const { setLoading } = useApi(() => API.postReview(productId, rate, text), false);
+  const { loading, setLoading } = useApi(
+    () =>
+      new Promise((resolve) =>
+        setTimeout(() => resolve({ productId, rate, text }), 5000)
+      ),
+    false
+  );
   return (
     <View style={styles.container}>
       <View style={styles.iconsRow}>
@@ -33,7 +40,7 @@ const ReviewForm = ({ productId }) => {
             name="arrow-right"
             color={Colors.green500}
             size={30}
-            disabled={isEmpty(text) || rate === 0}
+            disabled={isEmpty(text) || rate === 0 || loading}
             onPress={setLoading}
             forceTextInputFocus={false}
           />
