@@ -1,17 +1,8 @@
 import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
-import {
-  useSafeAreaInsets,
-  SafeAreaView,
-} from "react-native-safe-area-context";
-import {
-  ActivityIndicator,
-  Colors,
-  Portal,
-  Text,
-  useTheme,
-} from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ActivityIndicator, Portal, useTheme } from "react-native-paper";
 import { BlurView } from "expo-blur";
 import { useGlobals } from "../contexts/Global";
 import CatalogScreen from "../screens/CatalogScreen";

@@ -31,6 +31,10 @@ const SignupScreen = ({ navigation }) => {
       dispatch(
         setSessionAction({ token: data.token, username: username.value })
       );
+      const unsubscribe = navigation.addListener("blur", () => {
+        navigation.navigate("Profile");
+        unsubscribe();
+      });
       navigation.navigate("Home");
       return;
     }

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, Text, FlatList } from "react-native";
-import { Banner, FAB } from "react-native-paper";
+import { FAB } from "react-native-paper";
 import { useGlobals } from "../contexts/Global";
 import ProductCard from "../components/ProductCard";
 import useApi from "../hooks/useApi";
@@ -12,7 +12,6 @@ const EmptyListMessage = () => (
 );
 
 const CatalogScreen = ({ navigation }) => {
-  const [visible, setVisible] = useState(true);
   const { data, loading, setLoading } = useApi(API.products);
   const [{ session }, dispatch] = useGlobals();
 

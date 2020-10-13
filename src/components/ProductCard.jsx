@@ -1,6 +1,6 @@
 import React from "react";
-import { Image, StyleSheet } from "react-native";
-import { Card, Text, Paragraph, IconButton, Colors } from "react-native-paper";
+import { StyleSheet } from "react-native";
+import { Card, Paragraph } from "react-native-paper";
 
 const ProductCard = ({ id, image, text, title, onPress }) => {
   return (

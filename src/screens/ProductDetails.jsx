@@ -1,20 +1,7 @@
-import React, { useState, useCallback } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  SectionList,
-} from "react-native";
+import React, { useState } from "react";
+import { StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
-import {
-  Card,
-  Paragraph,
-  TextInput,
-  IconButton,
-  Colors,
-} from "react-native-paper";
-import { times } from "lodash";
+import { Card, Paragraph, ActivityIndicator } from "react-native-paper";
 import Close from "../components/Close";
 import Platform from "../utils/Platform";
 import useApi from "../hooks/useApi";
@@ -27,7 +14,7 @@ import { useGlobals } from "../contexts/Global";
 const ProductDetails = ({
   route: { params: { id, image, text, title } } = {},
 }) => {
-  const { data, loading, error } = useApi(() => API.reviews(id));
+  const { data, loading } = useApi(() => API.reviews(id));
   const [{ session }] = useGlobals();
   const [userPost, setUserPost] = useState(null);
 
@@ -69,6 +56,13 @@ const ProductDetails = ({
         {data.map((post) => (
           <ReviewPost key={post.id.toString()} {...post} />
         ))}
+        {loading && (
+          <ActivityIndicator
+            size={50}
+            animating={true}
+            style={styles.activity}
+          />
+        )}
       </ScrollView>
     </BlurView>
   );
@@ -81,5 +75,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: "center",
     justifyContent: "center",
+  },
+  activity: {
+    marginVertical: 12,
   },
 });

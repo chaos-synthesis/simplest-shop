@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import { View } from "react-native";
 import { FAB, Button, Paragraph, Dialog, Portal } from "react-native-paper";
 import PropTypes from "prop-types";

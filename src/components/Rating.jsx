@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { MaterialCommunityIcons as Icons } from "@expo/vector-icons";
 import { times } from "lodash";
 const Rating = ({ rate }) => {

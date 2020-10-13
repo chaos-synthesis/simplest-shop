@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableWithoutFeedback } from "react-native";
-import { Divider, Switch, Text, Title, useTheme } from "react-native-paper";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
+import { Divider, Switch, Button, Title, useTheme } from "react-native-paper";
 import { BlurView } from "expo-blur";
-import Constants from "expo-constants";
-import { debounce } from "lodash";
 import PlatformUtils from "../utils/Platform";
 import Close from "../components/Close";
 import { TextInput } from "../components/paper";
 import { useGlobals, setSessionAction, logoutAction } from "../contexts/Global";
 import LogoutButton from "../components/LogoutButton";
 import AvatarPicker from "../components/AvatarPicker";
-import { set } from "react-native-reanimated";
 
 const ProfileScreen = ({ navigation }) => {
   const { colors } = useTheme();
@@ -19,15 +15,22 @@ const ProfileScreen = ({ navigation }) => {
   const [image, setImage] = useState(session.avatar);
   const [name, setName] = useState(session.profile?.name || "");
   const [surname, setSurname] = useState(session.profile?.surname || "");
-
-  const debouncedUpdateSession = debounce(
-    () => dispatch(setSessionAction({ profile: { name, surname } })),
-    1000
+  const [allowOffline, setAllowOffline] = useState(
+    session.profile?.allowOffline
   );
-  useEffect(debouncedUpdateSession, [name, surname]);
+
+  const toggleOfflineMode = () => setAllowOffline(!allowOffline);
+
+  let unsubscribe;
+  useEffect(() => {
+    unsubscribe = navigation.addListener("blur", () => {
+      dispatch(setSessionAction({ profile: { name, surname, allowOffline } }));
+    });
+    return () => unsubscribe();
+  }, [name, surname, allowOffline]);
 
   const onLogout = () => {
-    debouncedUpdateSession.cancel();
+    unsubscribe();
     dispatch(logoutAction());
     navigation.popToTop();
   };
@@ -56,7 +59,21 @@ const ProfileScreen = ({ navigation }) => {
         <TextInput label="Name" value={name} onChangeText={setName} />
         <TextInput label="Surname" value={surname} onChangeText={setSurname} />
       </View>
-
+      <Divider style={{ marginTop: 10 }} />
+      <View style={styles.optionsContainer}>
+        <View style={styles.optionsOption}>
+          <Button
+            icon="brightness-6"
+            style={styles.optionsButton}
+            labelStyle={styles.optionsLabel}
+            uppercase={false}
+            theme={{ colors: { primary: colors.text } }}
+          >
+            Offline mode
+          </Button>
+          <Switch onChange={toggleOfflineMode} value={allowOffline} />
+        </View>
+      </View>
       <Divider style={{ marginTop: 10 }} />
       <View style={{ marginTop: 20 }}></View>
     </BlurView>
@@ -77,5 +94,24 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     justifyContent: "space-between",
     flexWrap: "nowrap",
+  },
+  optionsContainer: {
+    marginHorizontal: 20,
+    justifyContent: "flex-start",
+    marginTop: 10,
+    marginBottom: 10,
+  },
+  optionsOption: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  optionsButton: {
+    alignItems: "flex-start",
+    marginTop: 10,
+  },
+  optionsLabel: {
+    marginLeft: 23,
+    fontSize: 18,
   },
 });

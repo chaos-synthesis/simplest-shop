@@ -48,7 +48,6 @@ const useApi = (apiMethodFn, immediate = true) => {
       apiMethodFn().then(
         (res) => {
           isSubscribed && dispatch({ type: "fetchResponse", data: res });
-          console.log("useApi cb: ", res);
         },
         (e) => {
           console.error("useApi error: ", e);
