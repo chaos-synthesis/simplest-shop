@@ -17,7 +17,7 @@ function Main() {
   // update persisted state
   React.useEffect(() => {
     if (isReady) {
-      console.log("session", session);
+      console.log("persist session", session);
       Storage.setSessionState(session);
       API.setToken(session.token || null);
     }

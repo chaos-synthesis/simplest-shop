@@ -1,8 +1,9 @@
 import * as React from "react";
 import { View } from "react-native";
 import { FAB, Button, Paragraph, Dialog, Portal } from "react-native-paper";
+import PropTypes from "prop-types";
 
-const LogoutButton = ({ style, onConfirm }) => {
+const LogoutButton = ({ fab, style, onConfirm }) => {
   const [visible, setVisible] = React.useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
@@ -13,7 +14,18 @@ const LogoutButton = ({ style, onConfirm }) => {
 
   return (
     <View>
-      <FAB icon="logout-variant" style={style} onPress={showDialog} />
+      {fab ? (
+        <FAB icon="logout-variant" style={style} onPress={showDialog} />
+      ) : (
+        <Button
+          onPress={showDialog}
+          icon="logout"
+          uppercase={false}
+          contentStyle={{ justifyContent: "flex-end" }}
+        >
+          Log Out
+        </Button>
+      )}
       <Portal>
         <Dialog visible={visible} onDismiss={hideDialog}>
           <Dialog.Title>Log Out</Dialog.Title>
@@ -28,6 +40,16 @@ const LogoutButton = ({ style, onConfirm }) => {
       </Portal>
     </View>
   );
+};
+
+LogoutButton.propTypes = {
+  style: PropTypes.object,
+  onConfirm: PropTypes.func,
+  fab: PropTypes.bool,
+};
+
+LogoutButton.defaultProps = {
+  fab: false,
 };
 
 export default LogoutButton;

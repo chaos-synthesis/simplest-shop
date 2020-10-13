@@ -14,7 +14,7 @@ const CheckConnection = () => {
       // Clean up the subscription
       unsubscribe();
     };
-  });
+  }, []);
   return (
     <HelperText type="info" visible={!isConnected} style={styles.container}>
       Network error - check your connection!

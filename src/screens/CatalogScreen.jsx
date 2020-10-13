@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, FlatList } from "react-native";
 import { Banner, FAB } from "react-native-paper";
-import { useGlobals, logoutAction } from "../contexts/Global";
+import { useGlobals } from "../contexts/Global";
 import ProductCard from "../components/ProductCard";
 import useApi from "../hooks/useApi";
 import API from "../api";
-import LogoutButton from "../components/LogoutButton";
 import CheckConnection from "../components/CheckConnection";
 
 const EmptyListMessage = () => (
@@ -18,7 +17,7 @@ const CatalogScreen = ({ navigation }) => {
   const [{ session }, dispatch] = useGlobals();
 
   const onLogin = () => navigation.navigate("Auth");
-  const onLogout = () => dispatch(logoutAction());
+  const gotoProfile = () => navigation.navigate("Profile");
 
   return (
     <>
@@ -40,7 +39,11 @@ const CatalogScreen = ({ navigation }) => {
       {!session.token ? (
         <FAB icon="login-variant" style={styles.fab} onPress={onLogin} />
       ) : (
-        <LogoutButton style={styles.fab} onConfirm={onLogout} />
+        <FAB
+          icon="account-circle-outline"
+          style={styles.fab}
+          onPress={gotoProfile}
+        />
       )}
     </>
   );
