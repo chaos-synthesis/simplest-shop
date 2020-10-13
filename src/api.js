@@ -16,7 +16,7 @@ const api = {
    * @returns Promise<{success: boolean, token: string}>
    */
   async register(username, password) {
-    const result = await api._post("register", { username, password });
+    const result = await api._post("register/", { username, password });
     api._token = get(result, "token", null);
     return result;
   },
@@ -26,7 +26,7 @@ const api = {
    * @returns Promise<{success: boolean, token: string}>
    */
   async login(username, password) {
-    const result = await api._post("login", { username, password });
+    const result = await api._post("login/", { username, password });
     api._token = get(result, "token", null);
     return result;
   },
@@ -69,23 +69,27 @@ const api = {
     };
   },
   async _post(resourcePath, body) {
-    const res = await fetch(`${API_URL}/api/${resourcePath}/`, {
+    const res = await fetch(`${API_URL}/api/${resourcePath}`, {
       method: "POST",
       headers: api._headers,
       body: JSON.stringify(body),
     });
-    if (res.status >= 400) {
-      console.log(res);
-      throw "Oops, something went wrong!";
+    if (res.status < 300) {
+      return await res.json();
     }
-    return await res.json();
+    console.log(res);
+    throw { message: "Oops, something went wrong!", code: res.status };
   },
   async _get(resourcePath) {
     const res = await fetch(`${API_URL}/api/${resourcePath}`, {
       method: "GET",
       headers: api._headers,
     });
-    return await res.json();
+    if (res.status < 300) {
+      return await res.json();
+    }
+    console.log(res);
+    throw { message: "Oops, something went wrong!", code: res.status };
   },
 };
 

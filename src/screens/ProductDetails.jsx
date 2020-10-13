@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import {
   StyleSheet,
   View,
@@ -29,6 +29,7 @@ const ProductDetails = ({
 }) => {
   const { data, loading, error } = useApi(() => API.reviews(id));
   const [{ session }] = useGlobals();
+  const [userPost, setUserPost] = useState(null);
 
   return (
     <BlurView
@@ -54,9 +55,17 @@ const ProductDetails = ({
           <Card.Actions
             style={{ flexDirection: "column", alignItems: "flex-start" }}
           >
-            {!!session.token && <ReviewForm productId={id} />}
+            {!!session.token && !userPost && (
+              <ReviewForm productId={id} onSubmit={setUserPost} />
+            )}
           </Card.Actions>
         </Card>
+        {userPost && (
+          <ReviewPost
+            {...userPost}
+            created_by={{ username: session.username }}
+          />
+        )}
         {data.map((post) => (
           <ReviewPost key={post.id.toString()} {...post} />
         ))}

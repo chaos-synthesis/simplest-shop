@@ -19,6 +19,7 @@ function Main() {
     if (isReady) {
       console.log("session", session);
       Storage.setSessionState(session);
+      API.setToken(session.token || null);
     }
   }, [session, isReady]);
 

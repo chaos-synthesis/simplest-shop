@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import { IconButton, TextInput, Colors } from "react-native-paper";
 import { times, isEmpty } from "lodash";
 import useApi from "../hooks/useApi";
 import API from "../api";
 
-const ReviewForm = ({ productId }) => {
+const ReviewForm = ({ productId, onSubmit }) => {
   const [rate, setRate] = useState(0);
   const [text, setText] = useState("");
-  //   const { setLoading } = useApi(() => API.postReview(productId, rate, text), false);
-  const { loading, setLoading } = useApi(
-    () =>
-      new Promise((resolve) =>
-        setTimeout(() => resolve({ productId, rate, text }), 5000)
-      ),
+  const { data, loading, setLoading } = useApi(
+    () => API.postReview(productId, rate, text),
     false
   );
+
+  useEffect(() => {
+    // FIXME: The API defines response of type {review_id:number},
+    // but actually it returns {success:boolean}
+    if (data?.success/*data?.review_id*/) onSubmit({ rate, text });
+  }, [data]);
+
   return (
     <View style={styles.container}>
       <View style={styles.iconsRow}>
@@ -26,12 +29,14 @@ const ReviewForm = ({ productId }) => {
             color={Colors.red500}
             size={20}
             onPress={() => setRate(idx + 1)}
+            disabled={loading}
           />
         ))}
       </View>
       <TextInput
         value={text}
         onChangeText={setText}
+        disabled={loading}
         multiline={true}
         maxLength={250}
         mode="outlined"

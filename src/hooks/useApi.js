@@ -1,5 +1,5 @@
 import React from "react";
-import { useGlobals } from "../contexts/Global";
+import { useGlobals, logoutAction } from "../contexts/Global";
 
 /**
  * @param state
@@ -12,11 +12,13 @@ function reducer(state, action) {
       return {
         loading: false,
         data: action.data,
+        error: action.error || null,
       };
     case "fetchRequest":
       return {
         loading: true,
         data: [],
+        error: null,
       };
     default:
       throw new Error("action.type is not defined inside reducer's switch");
@@ -28,12 +30,12 @@ function reducer(state, action) {
  * @returns {{data: *, setLoading: (function(): void), loading: *, error: number}}
  */
 const useApi = (apiMethodFn, immediate = true) => {
-  const [{ data, loading }, dispatch] = React.useReducer(reducer, {
+  const [{ data, loading, error }, dispatch] = React.useReducer(reducer, {
     loading: immediate,
     data: [],
+    error: null,
   });
-  const [error, setError] = React.useState(0);
-  const [{ session }] = useGlobals();
+  const [{ session }, dispatchGlobal] = useGlobals();
 
   const setLoading = () => {
     dispatch({ type: "fetchRequest" });
@@ -50,7 +52,11 @@ const useApi = (apiMethodFn, immediate = true) => {
         },
         (e) => {
           console.error("useApi error: ", e);
-          isSubscribed && setError((error) => error + 1);
+          isSubscribed && dispatch({ type: "fetchResponse", error: e.message });
+
+          if (e.code === 401) {
+            dispatchGlobal(logoutAction());
+          }
         }
       );
     }

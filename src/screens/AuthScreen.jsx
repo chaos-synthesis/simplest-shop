@@ -17,7 +17,7 @@ const AuthScreen = ({ navigation }) => {
   const [password, setPassword] = useState({ value: "", error: "" });
   const [apiError, setApiError] = useState({ visible: false, message: "" });
   const { data, loading, setLoading, error } = useApi(
-    () => API.login(username, password),
+    () => API.login(username.value, password.value),
     false
   );
   const [_, dispatch] = useGlobals();
@@ -28,7 +28,9 @@ const AuthScreen = ({ navigation }) => {
   React.useEffect(() => {
     clearTimeout(timeoutHandle);
     if (data?.success) {
-      dispatch(setSessionAction({ token: data.token }));
+      dispatch(
+        setSessionAction({ token: data.token, username: username.value })
+      );
       navigation.popToTop();
       return;
     }
