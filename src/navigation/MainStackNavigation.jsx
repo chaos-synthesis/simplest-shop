@@ -2,6 +2,10 @@ import React from "react";
 import { StatusBar, StyleSheet, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import {
+  useSafeAreaInsets,
+  SafeAreaView,
+} from "react-native-safe-area-context";
+import {
   ActivityIndicator,
   Colors,
   Portal,
@@ -33,6 +37,7 @@ const BaseStackNav = createStackNavigator();
 const MainStackNavigation = () => {
   const [{ showLoader }] = useGlobals();
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <>
@@ -42,7 +47,10 @@ const MainStackNavigation = () => {
         animated
       />
       <BaseStackNav.Navigator
-        screenOptions={{ headerShown: false, cardStyle }}
+        screenOptions={{
+          headerShown: false,
+          cardStyle: [styles.cardStyle, { paddingBottom: insets.bottom }],
+        }}
         mode="modal"
       >
         <BaseStackNav.Screen
@@ -50,20 +58,15 @@ const MainStackNavigation = () => {
           component={CatalogScreen}
           options={{
             headerShown: true,
-            cardStyle: null,
+            cardStyle: { paddingBottom: insets.bottom },
             headerTitle: "Online Shop",
           }}
         />
         <BaseStackNav.Screen
           name="Product Details"
           component={ProductDetails}
-          options={{ cardStyle }}
         />
-        <BaseStackNav.Screen
-          name="Profile"
-          component={ProfileScreen}
-          options={{ cardStyle }}
-        />
+        <BaseStackNav.Screen name="Profile" component={ProfileScreen} />
         <BaseStackNav.Screen name="Auth" component={AuthStackNavigation} />
       </BaseStackNav.Navigator>
       {showLoader && (
@@ -84,16 +87,14 @@ const MainStackNavigation = () => {
   );
 };
 
-const cardStyle = {
-  // backgroundColor: "transparent",
-  marginTop: 50,
-  borderTopLeftRadius: 30,
-  borderTopRightRadius: 30,
-  overflow: "hidden",
-  elevation: 10,
-};
-
 const styles = StyleSheet.create({
+  cardStyle: {
+    marginTop: 50,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    overflow: "hidden",
+    elevation: 10,
+  },
   blurContainer: {
     ...StyleSheet.absoluteFillObject,
     flex: 1,

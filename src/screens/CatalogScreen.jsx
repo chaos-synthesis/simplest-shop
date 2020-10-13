@@ -6,6 +6,7 @@ import ProductCard from "../components/ProductCard";
 import useApi from "../hooks/useApi";
 import API from "../api";
 import LogoutButton from "../components/LogoutButton";
+import CheckConnection from "../components/CheckConnection";
 
 const EmptyListMessage = () => (
   <Text style={styles.emptyListStyle}>oops! There's nothing to sell!</Text>
@@ -21,6 +22,7 @@ const CatalogScreen = ({ navigation }) => {
 
   return (
     <>
+      <CheckConnection />
       <FlatList
         data={data}
         renderItem={({ item }) => (

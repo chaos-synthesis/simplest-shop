@@ -52,6 +52,7 @@ const styles = StyleSheet.create({
     height: 5,
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: 20,
   },
   iosBarContent: {
     height: 5,

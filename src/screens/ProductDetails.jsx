@@ -38,8 +38,8 @@ const ProductDetails = ({
       intensity={Platform.isAndroid ? 150 : 100}
     >
       <Close position="right" />
-      <ScrollView>
-        <Card style={{ marginTop: 50 }}>
+      <ScrollView style={{ marginTop: 0 }}>
+        <Card>
           <Card.Title
             title={title}
             titleStyle={{
